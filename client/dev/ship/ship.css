@@ -1,5 +1,28 @@
-#ship {
+.ship {
     position: absolute;
     z-index: 3;
-    color: #fff;
+    background-color: #91a3ab;
+    width: 100px;
+    height: 30px;
+    border-radius: 100%;
+}
+
+.ship:before {
+    content: "";
+    position: absolute;
+    top: -5px;
+    left: 25px;    
+    height: 20px;
+    width: 50px;
+    background-color: #91a3ab;
+    border-radius: 100%;  
+}
+
+.ship:after {
+    content: "\\__/";
+    position: absolute;
+    top: -15px;
+    left: 38px;
+    font-weight: bold;
+    color: #91a3ab;
 }

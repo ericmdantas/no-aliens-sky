@@ -6,7 +6,7 @@ module.exports = {
     data() {
         return {
             stars: [],
-            NUM_STARS: 1000,
+            NUM_STARS: 200,
             bus: new Bus(),
             events: {
                 KEY_UP: 'key.up',
@@ -39,7 +39,7 @@ module.exports = {
                             break;
 
                     case 40: this.bus.emit(this.events.KEY_DOWN); 
-                    break;
+                            break;
 
                     case 37: this.bus.emit(this.events.KEY_LEFT); 
                             break;
