@@ -2,12 +2,11 @@ const path = require('path');
 
 module.exports = (env) => {
     return {
-        devtools: 'source-map',
         entry: './client/dev/index.js',
         output: {
-            filaname: 'bundle.js',
-            filepath: 'client/dev/',
-            publicPath: 'client/dev/'
+            filename: 'bundle.js',
+            path: './client/dev/',
+            publicPath: '/client/dev'
         },
         module: {
             loaders: [
@@ -23,6 +22,13 @@ module.exports = (env) => {
                 {
                     test: /\.html$/,
                     loader: 'html'
+                },
+                {
+                    test: /\.(jpe?g|png|gif|svg)$/i,
+                    loaders: [
+                        'file?hash=sha512&digest=hex&name=[hash].[ext]',
+                        'image-webpack?bypassOnDebug&optimizationLevel=7&interlaced=false'
+                    ]
                 }
             ]
         }

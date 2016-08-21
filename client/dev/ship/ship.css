@@ -1,0 +1,5 @@
+#ship {
+    position: absolute;
+    z-index: 3;
+    color: #fff;
+}
