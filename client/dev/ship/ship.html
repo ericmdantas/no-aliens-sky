@@ -1,4 +1,8 @@
 <div>
     <div class="ship" 
-         :style="ship"></div>
+         :style="{
+            top: ship.y + 'px',
+            left: ship.x + 'px',
+            transform: ship.transform
+         }"></div>
 </div>
