@@ -5,7 +5,7 @@ module.exports = {
     data() {
         return {
             SHIP_MOV: 10,
-            shipStyle: {
+            ship: {
                 top: '300px',
                 left: '500px',
                 transform: ''
@@ -13,33 +13,52 @@ module.exports = {
         }
     },
     ready() {
-        this.bus.on(this.events.KEY_UP, () => {
-            let _next = ~~(this.shipStyle.top.replace(/\D/g, '')) - this.SHIP_MOV;
+        this._listenCommands();
+    },
+    methods: {
+        _listenCommands() {
+            this.bus.on(this.events.KEY_UP, () => {
+                let _next = ~~(this.ship.top.replace(/\D/g, '')) - this.SHIP_MOV;
 
-            this.shipStyle.top = _next + 'px';          
-            this.shipStyle.transform = '';
-        });
+                this.ship.top = _next + 'px';          
+                this.ship.transform = '';              
 
-        this.bus.on(this.events.KEY_DOWN, () => {
-            let _next = ~~(this.shipStyle.top.replace(/\D/g, '')) + this.SHIP_MOV;
+                this._emitShipPos();  
+            });
 
-            this.shipStyle.top = _next + 'px';          
-            this.shipStyle.transform = '';
-        });
+            this.bus.on(this.events.KEY_DOWN, () => {
+                let _next = ~~(this.ship.top.replace(/\D/g, '')) + this.SHIP_MOV;
 
-        this.bus.on(this.events.KEY_LEFT, () => {
-            let _next = ~~(this.shipStyle.left.replace(/\D/g, '')) - this.SHIP_MOV;
+                this.ship.top = _next + 'px';          
+                this.ship.transform = '';
 
-            this.shipStyle.left = _next + 'px';          
-            this.shipStyle.transform = 'rotate(-10deg)';
-        });
+                this._emitShipPos();  
+            });
 
-        this.bus.on(this.events.KEY_RIGHT, () => {
-            let _next = ~~(this.shipStyle.left.replace(/\D/g, '')) + this.SHIP_MOV;
+            this.bus.on(this.events.KEY_LEFT, () => {
+                let _next = ~~(this.ship.left.replace(/\D/g, '')) - this.SHIP_MOV;
 
-            this.shipStyle.left = _next + 'px';
-            this.shipStyle.transform = 'rotate(10deg)';
-        });
+                this.ship.left = _next + 'px';          
+                this.ship.transform = 'rotate(-5deg)';
+
+                this._emitShipPos();  
+            });
+
+            this.bus.on(this.events.KEY_RIGHT, () => {
+                let _next = ~~(this.ship.left.replace(/\D/g, '')) + this.SHIP_MOV;
+
+                this.ship.left = _next + 'px';
+                this.ship.transform = 'rotate(5deg)';
+
+                this._emitShipPos();  
+            });
+        },
+        _emitShipPos() {
+            this.bus.emit(this.events.SHIP_POS, {
+                x: ~~this.ship.left.replace(/px/g, ''),
+                y: ~~this.ship.top.replace(/px/g, '')
+            })
+        }
     },
     template: require('./ship.html')
 }

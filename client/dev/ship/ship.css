@@ -5,6 +5,7 @@
     width: 100px;
     height: 30px;
     border-radius: 100%;
+    transition: transform .3s ease-in-out;
 }
 
 .ship:before {
