@@ -6,18 +6,6 @@
     background-color: #000;
 }
 
-#moon {
-    position: absolute;
-    top: 35px;
-    right: 35px;
-    z-index: 2;
-    background-color: #ffffbe;
-    height: 100px;
-    width: 100px;
-    border-radius: 100%;
-    box-shadow: 0 0 10px #fff; 
-}
-
 .star {
     position: absolute;
     z-index: 1;    
