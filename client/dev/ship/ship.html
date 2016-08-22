@@ -4,5 +4,22 @@
             top: ship.y + 'px',
             left: ship.x + 'px',
             transform: ship.transform
-         }"></div>
+         }">
+            <span class="ship-top"></span>            
+
+            <span class="ship-light-1"
+                  :style="{
+                    'background-color': shipLight1.bkg
+                  }"></span>
+
+            <span class="ship-light-2"
+                  :style="{
+                    'background-color': shipLight2.bkg
+                  }"></span>
+                  
+            <span class="ship-light-3"
+                  :style="{
+                    'background-color': shipLight3.bkg
+                  }"></span>
+    </div>
 </div>
