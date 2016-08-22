@@ -5,13 +5,16 @@
         <div class="star"
              v-for="star in stars"
              track-by="$index"
+             :class="{
+                shiny: star.shiny
+             }"
              :style="{
-                top: star.y,
-                left: star.x
+                top: star.y + 'px',
+                left: star.x + 'px'
              }"></div>
 
         <ship :bus="bus"
-            :events="events"></ship>
+              :events="events"></ship>
 
     </div>  
 </div> 
