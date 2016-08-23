@@ -7,9 +7,9 @@ module.exports = {
             SHIP_MOV: 5,
             boundaries: {
                 top: -5,
-                down: 1000,
-                right: 2000,
-                left: -5
+                down: document.body.offsetHeight,
+                right: document.body.offsetWidth,
+                left: -100
             },
             shipLight1: {
                 bkg: 'orange'
