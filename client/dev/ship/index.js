@@ -6,6 +6,8 @@ module.exports = {
         return {
             SHIP_MOV: 5,
             boundaries: {
+                top: -5,
+                down: 1000,
                 right: 2000,
                 left: -5
             },
@@ -55,14 +57,24 @@ module.exports = {
         },
         _listenCommands() {
             this.bus.on(this.events.KEY_UP, () => {
-                this.ship.y = this.ship.y - this.SHIP_MOV;      
+                if (this.ship.y < this.boundaries.top) {
+                    this.ship.y = this.boundaries.down;      
+                } else {
+                    this.ship.y = this.ship.y - this.SHIP_MOV;      
+                }
+
                 this.ship.transform = '';              
 
                 this._emitShipPos();  
             });
 
             this.bus.on(this.events.KEY_DOWN, () => {
-                this.ship.y = this.ship.y + this.SHIP_MOV;        
+                if (this.ship.y > this.boundaries.down) {
+                    this.ship.y = this.boundaries.top;
+                } else {
+                    this.ship.y = this.ship.y + this.SHIP_MOV;        
+                }
+
                 this.ship.transform = '';
 
                 this._emitShipPos();  
