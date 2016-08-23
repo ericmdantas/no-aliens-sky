@@ -5,6 +5,10 @@ module.exports = {
     data() {
         return {
             SHIP_MOV: 5,
+            boundaries: {
+                right: 2000,
+                left: -5
+            },
             shipLight1: {
                 bkg: 'orange'
             },
@@ -65,14 +69,24 @@ module.exports = {
             });
 
             this.bus.on(this.events.KEY_LEFT, () => {
-                this.ship.x = this.ship.x - this.SHIP_MOV;         
+                if (this.ship.x < this.boundaries.left) {
+                    this.ship.x = this.boundaries.right;
+                } else {
+                    this.ship.x = this.ship.x - this.SHIP_MOV;         
+                }
+
                 this.ship.transform = 'rotate(-5deg)';
 
                 this._emitShipPos();  
             });
 
             this.bus.on(this.events.KEY_RIGHT, () => {
-                this.ship.x = this.ship.x + this.SHIP_MOV;
+                if (this.ship.x > this.boundaries.right) {
+                    this.ship.x = -100;
+                } else {
+                    this.ship.x = this.ship.x + this.SHIP_MOV;
+                }
+
                 this.ship.transform = 'rotate(5deg)';
 
                 this._emitShipPos();  
@@ -80,8 +94,8 @@ module.exports = {
         },
         _emitShipPos() {
             this.bus.emit(this.events.SHIP_POS, {
-                x: ~~this.ship.x,
-                y: ~~this.ship.y
+                x: this.ship.x,
+                y: this.ship.y
             })
         }
     },
