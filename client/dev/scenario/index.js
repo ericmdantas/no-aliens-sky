@@ -6,7 +6,8 @@ module.exports = {
     data() {
         return {
             stars: [],
-            NUM_STARS: 200,
+            NUM_STARS: 100,
+            STAR_MOV: 2,
             bus: new Bus(),
             lastShipPos: {
                 x: 0,
@@ -18,7 +19,9 @@ module.exports = {
                 KEY_LEFT: 'key.left',
                 KEY_RIGHT: 'key.right',
 
-                SHIP_POS: 'ship.pos'
+                SHIP_POS: 'ship.pos',
+
+                SHIP_DISTANCE: 'ship.distance'
             }
         }
     },
@@ -75,19 +78,39 @@ module.exports = {
         },
         _listenShip() {
             this.bus.on(this.events.SHIP_POS, (pos) => {               
+                if (pos.y > this.lastShipPos.y) {
+                    for (let i = 0, len = this.NUM_STARS; i < len; i++) {
+                        this.stars[i].y -= this.STAR_MOV;
+                    }
+                }
+
+                if (pos.y < this.lastShipPos.y) {
+                    for (let i = 0, len = this.NUM_STARS; i < len; i++) {
+                        this.stars[i].y += this.STAR_MOV;
+                    }
+                }
+
                 if (pos.x > this.lastShipPos.x) {
                     for (let i = 0, len = this.NUM_STARS; i < len; i++) {
-                        this.stars[i].x -= 10;
+                        this.stars[i].x -= this.STAR_MOV;
                     }
                 }
 
                 if (pos.x < this.lastShipPos.x) {
                     for (let i = 0, len = this.NUM_STARS; i < len; i++) {
-                        this.stars[i].x += 10;
+                        this.stars[i].x += this.STAR_MOV;
                     }
                 }
 
                 for (let i = 0, len = this.NUM_STARS; i < len; i++) {
+                    if (this.stars[i].y < 0) {
+                        this.stars[i].y = this._bodyHeight();
+                    }
+
+                   if (this.stars[i].y > this._bodyHeight()) { 
+                        this.stars[i].y = 0;
+                    }
+
                     if (this.stars[i].x < 0) {
                         this.stars[i].x = this._bodyWidth(); 
                     }
@@ -100,6 +123,10 @@ module.exports = {
                 this.lastShipPos.x = pos.x;
                 this.lastShipPos.y = pos.y;
             });
+
+            this.bus.on(this.events.BUS_DISTANCE, (info) => {
+                this.distance = info.distance;
+            })
         },
         _randomX() {
             return Math.floor(Math.random() * this._bodyWidth()) 

@@ -23,7 +23,8 @@ module.exports = {
             ship: {
                 y: 500,
                 x: 300,
-                transform: ''
+                transform: '',
+                distance: 0
             }
         }
     },
@@ -34,9 +35,9 @@ module.exports = {
     methods: {
         _startLights() {
             setInterval(() => {
-                let _light1 = Math.floor(Math.random() * 3);
-                let _light2 = Math.floor(Math.random() * 3);
-                let _light3 = Math.floor(Math.random() * 3);
+                let _light1 = ~~(Math.random() * 3);
+                let _light2 = ~~(Math.random() * 3);
+                let _light3 = ~~(Math.random() * 3);
 
                 this._changeLights(this.shipLight1, _light1);
                 this._changeLights(this.shipLight2, _light2);
@@ -65,7 +66,7 @@ module.exports = {
 
                 this.ship.transform = '';              
 
-                this._emitShipPos();  
+                this._emitShipInfo();  
             });
 
             this.bus.on(this.events.KEY_DOWN, () => {
@@ -77,7 +78,7 @@ module.exports = {
 
                 this.ship.transform = '';
 
-                this._emitShipPos();  
+                this._emitShipInfo();  
             });
 
             this.bus.on(this.events.KEY_LEFT, () => {
@@ -89,7 +90,7 @@ module.exports = {
 
                 this.ship.transform = 'rotate(-5deg)';
 
-                this._emitShipPos();  
+                this._emitShipInfo();  
             });
 
             this.bus.on(this.events.KEY_RIGHT, () => {
@@ -101,14 +102,18 @@ module.exports = {
 
                 this.ship.transform = 'rotate(5deg)';
 
-                this._emitShipPos();  
+                this._emitShipInfo();  
             });
         },
-        _emitShipPos() {
+        _emitShipInfo() {
             this.bus.emit(this.events.SHIP_POS, {
                 x: this.ship.x,
                 y: this.ship.y
             })
+
+            this.bus.emit(this.events.SHIP_DISTANCE, {
+                distance: this.ship.distance
+            });
         }
     },
     template: require('./ship.html')
