@@ -1,3 +1,3 @@
 space stuff
 
-[sideral.surge.sh](http://sideral.surge.sh)
+[http://no-aliens-sky.surge.sh](http://no-aliens-sky.surge.sh)
