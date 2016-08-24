@@ -4,7 +4,7 @@ module.exports = {
     props: ['bus', 'events'],
     data() {
        return {
-            SHIP_MOV: 5,            
+            shipMov: 5,            
 
             boundaries: {
                 top: -5,
@@ -60,13 +60,13 @@ module.exports = {
             }
         },
         _registerMovement() {
-            this.ship.distance += this.SHIP_MOV;
+            this.ship.distance += this.shipMov;
         },
         _moveUp() {
             if (this.ship.y < this.boundaries.top) {
                 this.ship.y = this.boundaries.down;      
             } else {
-                this.ship.y = this.ship.y - this.SHIP_MOV;      
+                this.ship.y = this.ship.y - this.shipMov;      
             }
 
             this.ship.transform = '';              
@@ -78,7 +78,7 @@ module.exports = {
             if (this.ship.y > this.boundaries.down) {
                 this.ship.y = this.boundaries.top;
             } else {
-                this.ship.y = this.ship.y + this.SHIP_MOV;        
+                this.ship.y = this.ship.y + this.shipMov;        
             }
 
             this.ship.transform = '';
@@ -90,7 +90,7 @@ module.exports = {
             if (this.ship.x < this.boundaries.left) {
                 this.ship.x = this.boundaries.right;
             } else {
-                this.ship.x = this.ship.x - this.SHIP_MOV;         
+                this.ship.x = this.ship.x - this.shipMov;         
             }
 
             this.ship.transform = 'rotate(-5deg)';
@@ -102,7 +102,7 @@ module.exports = {
             if (this.ship.x > this.boundaries.right) {
                 this.ship.x = -100;
             } else {
-                this.ship.x = this.ship.x + this.SHIP_MOV;
+                this.ship.x = this.ship.x + this.shipMov;
             }
 
             this.ship.transform = 'rotate(5deg)';
@@ -126,6 +126,20 @@ module.exports = {
             this.bus.on(this.events.KEY_RIGHT, () => {
                 this._moveRight(); 
             });
+
+            this.bus.on(this.events.KEY_CTRL_ON, () => {
+                this._activateTurbo();
+            });
+
+            this.bus.on(this.events.KEY_CTRL_OFF, () => {
+                this._deactivateTurbo();
+            });
+        },
+        _deactivateTurbo() {
+            this.shipMov = 5;
+        },
+        _activateTurbo() {
+            this.shipMov = 50;
         },
         _emitShipInfo() {
             this.bus.emit(this.events.SHIP_POS, {

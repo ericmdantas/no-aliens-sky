@@ -22,6 +22,9 @@ module.exports = {
                 KEY_LEFT: 'key.left',
                 KEY_RIGHT: 'key.right',
 
+                KEY_CTRL_ON: 'key.ctrl:on',
+                KEY_CTRL_OFF: 'key.ctrl:off',
+
                 SHIP_POS: 'ship.pos',
                 SHIP_DISTANCE: 'ship.distance',
                 SHIP_TURBO_ON: 'ship.turbo:on',
@@ -65,20 +68,31 @@ module.exports = {
                 })
             }, 3000);
         },
+        _emitKeyEvents(key, ctrlKey) {
+            this.bus.emit(key);
+
+            if (ctrlKey) {
+                this.bus.emit(this.events.KEY_CTRL_ON);
+                this.starMov = 50;
+            } else {
+                this.bus.emit(this.events.KEY_CTRL_OFF);
+                this.starMov = 2;
+            }
+        },
         _listenCommands() {
-            document.body.addEventListener('keydown', ({which}) => {
+            document.body.addEventListener('keydown', ({ctrlKey, which}) => {
                 switch (which) {
-                    case 38: this.bus.emit(this.events.KEY_UP); 
-                            break;
+                    case 38: this._emitKeyEvents(this.events.KEY_UP, ctrlKey);                             
+                             break;
 
-                    case 40: this.bus.emit(this.events.KEY_DOWN); 
-                            break;
+                    case 40: this._emitKeyEvents(this.events.KEY_DOWN, ctrlKey);
+                             break;
 
-                    case 37: this.bus.emit(this.events.KEY_LEFT); 
-                            break;
+                    case 37: this._emitKeyEvents(this.events.KEY_LEFT, ctrlKey); 
+                             break;
                     
-                    case 39: this.bus.emit(this.events.KEY_RIGHT); 
-                            break;
+                    case 39: this._emitKeyEvents(this.events.KEY_RIGHT, ctrlKey);
+                             break;
                 }
             });
         },
