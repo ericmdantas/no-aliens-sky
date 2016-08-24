@@ -6,6 +6,15 @@
     background-color: #000;
 }
 
+.scenario-info {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    background-color: #eee;
+    padding: 15px;
+    font-family: monospace;
+}
+
 .star {
     position: absolute;
     z-index: 1;    

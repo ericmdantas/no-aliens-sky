@@ -3,8 +3,9 @@ import './ship.css';
 module.exports = {
     props: ['bus', 'events'],
     data() {
-        return {
-            SHIP_MOV: 5,
+       return {
+            SHIP_MOV: 5,            
+
             boundaries: {
                 top: -5,
                 down: document.body.offsetHeight,
@@ -20,9 +21,11 @@ module.exports = {
             shipLight3: {
                 bkg: 'orange'
             },
+            
             ship: {
                 y: 500,
                 x: 300,
+                turbo: false,
                 transform: '',
                 distance: 0
             }
@@ -56,6 +59,9 @@ module.exports = {
                         break;
             }
         },
+        _registerMovement() {
+            this.ship.distance += this.SHIP_MOV;
+        },
         _listenCommands() {
             this.bus.on(this.events.KEY_UP, () => {
                 if (this.ship.y < this.boundaries.top) {
@@ -66,7 +72,8 @@ module.exports = {
 
                 this.ship.transform = '';              
 
-                this._emitShipInfo();  
+                this._registerMovement();
+                this._emitShipInfo();
             });
 
             this.bus.on(this.events.KEY_DOWN, () => {
@@ -78,6 +85,7 @@ module.exports = {
 
                 this.ship.transform = '';
 
+                this._registerMovement();
                 this._emitShipInfo();  
             });
 
@@ -90,6 +98,7 @@ module.exports = {
 
                 this.ship.transform = 'rotate(-5deg)';
 
+                this._registerMovement();
                 this._emitShipInfo();  
             });
 
@@ -102,6 +111,7 @@ module.exports = {
 
                 this.ship.transform = 'rotate(5deg)';
 
+                this._registerMovement();
                 this._emitShipInfo();  
             });
         },

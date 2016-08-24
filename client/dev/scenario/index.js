@@ -5,10 +5,13 @@ import {Bus} from 'ubus';
 module.exports = {
     data() {
         return {
-            stars: [],
             NUM_STARS: 100,
             STAR_MOV: 2,
+
             bus: new Bus(),
+
+            distance: 0,
+            stars: [],
             lastShipPos: {
                 x: 0,
                 y: 0
@@ -44,19 +47,21 @@ module.exports = {
             }
 
             setInterval(() => {
-                for (let i = 0, len = this.NUM_STARS; i < len; i++) {
-                    this.stars[i].shiny = false;
-                }
-
-                for (let i = 0, len = this.NUM_STARS; i < len; i++) {
-                    let _rand1 = Math.floor(Math.random() * len);
-                    let _rand2 = Math.floor(Math.random() * len);
-                    let _rand3 = Math.floor(Math.random() * len);
-
-                    if ((i === _rand1) || (i === _rand2) || (i === _rand3)) {
-                       this.stars[i].shiny = true;
+                window.requestAnimationFrame(() => {
+                    for (let i = 0, len = this.NUM_STARS; i < len; i++) {
+                        this.stars[i].shiny = false;
                     }
-                }
+
+                    for (let i = 0, len = this.NUM_STARS; i < len; i++) {
+                        let _rand1 = Math.floor(Math.random() * len);
+                        let _rand2 = Math.floor(Math.random() * len);
+                        let _rand3 = Math.floor(Math.random() * len);
+
+                        if ((i === _rand1) || (i === _rand2) || (i === _rand3)) {
+                        this.stars[i].shiny = true;
+                        }
+                    }
+                })
             }, 3000);
         },
         _listenCommands() {
@@ -75,58 +80,62 @@ module.exports = {
                             break;
                 }
             });
+
+
         },
         _listenShip() {
             this.bus.on(this.events.SHIP_POS, (pos) => {               
-                if (pos.y > this.lastShipPos.y) {
+                window.requestAnimationFrame(() => {
+                    if (pos.y > this.lastShipPos.y) {
+                        for (let i = 0, len = this.NUM_STARS; i < len; i++) {
+                            this.stars[i].y -= this.STAR_MOV;
+                        }
+                    }
+
+                    if (pos.y < this.lastShipPos.y) {
+                        for (let i = 0, len = this.NUM_STARS; i < len; i++) {
+                            this.stars[i].y += this.STAR_MOV;
+                        }
+                    }
+
+                    if (pos.x > this.lastShipPos.x) {
+                        for (let i = 0, len = this.NUM_STARS; i < len; i++) {
+                            this.stars[i].x -= this.STAR_MOV;
+                        }
+                    }
+
+                    if (pos.x < this.lastShipPos.x) {
+                        for (let i = 0, len = this.NUM_STARS; i < len; i++) {
+                            this.stars[i].x += this.STAR_MOV;
+                        }
+                    }
+
                     for (let i = 0, len = this.NUM_STARS; i < len; i++) {
-                        this.stars[i].y -= this.STAR_MOV;
-                    }
-                }
+                        if (this.stars[i].y < 0) {
+                            this.stars[i].y = this._bodyHeight();
+                        }
 
-                if (pos.y < this.lastShipPos.y) {
-                    for (let i = 0, len = this.NUM_STARS; i < len; i++) {
-                        this.stars[i].y += this.STAR_MOV;
-                    }
-                }
+                    if (this.stars[i].y > this._bodyHeight()) { 
+                            this.stars[i].y = 0;
+                        }
 
-                if (pos.x > this.lastShipPos.x) {
-                    for (let i = 0, len = this.NUM_STARS; i < len; i++) {
-                        this.stars[i].x -= this.STAR_MOV;
-                    }
-                }
+                        if (this.stars[i].x < 0) {
+                            this.stars[i].x = this._bodyWidth(); 
+                        }
 
-                if (pos.x < this.lastShipPos.x) {
-                    for (let i = 0, len = this.NUM_STARS; i < len; i++) {
-                        this.stars[i].x += this.STAR_MOV;
-                    }
-                }
-
-                for (let i = 0, len = this.NUM_STARS; i < len; i++) {
-                    if (this.stars[i].y < 0) {
-                        this.stars[i].y = this._bodyHeight();
+                        if (this.stars[i].x > this._bodyWidth()) {
+                            this.stars[i].x = 0; 
+                        }
                     }
 
-                   if (this.stars[i].y > this._bodyHeight()) { 
-                        this.stars[i].y = 0;
-                    }
-
-                    if (this.stars[i].x < 0) {
-                        this.stars[i].x = this._bodyWidth(); 
-                    }
-
-                    if (this.stars[i].x > this._bodyWidth()) {
-                        this.stars[i].x = 0; 
-                    }
-                }
-
-                this.lastShipPos.x = pos.x;
-                this.lastShipPos.y = pos.y;
+                    this.lastShipPos.x = pos.x;
+                    this.lastShipPos.y = pos.y;
+                })
             });
 
-            this.bus.on(this.events.BUS_DISTANCE, (info) => {
+            this.bus.on(this.events.SHIP_DISTANCE, (info) => {
                 this.distance = info.distance;
-            })
+            });
         },
         _randomX() {
             return Math.floor(Math.random() * this._bodyWidth()) 
