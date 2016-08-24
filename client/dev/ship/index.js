@@ -62,57 +62,69 @@ module.exports = {
         _registerMovement() {
             this.ship.distance += this.SHIP_MOV;
         },
+        _moveUp() {
+            if (this.ship.y < this.boundaries.top) {
+                this.ship.y = this.boundaries.down;      
+            } else {
+                this.ship.y = this.ship.y - this.SHIP_MOV;      
+            }
+
+            this.ship.transform = '';              
+
+            this._registerMovement();
+            this._emitShipInfo();
+        },
+        _moveDown() {
+            if (this.ship.y > this.boundaries.down) {
+                this.ship.y = this.boundaries.top;
+            } else {
+                this.ship.y = this.ship.y + this.SHIP_MOV;        
+            }
+
+            this.ship.transform = '';
+
+            this._registerMovement();
+            this._emitShipInfo(); 
+        },
+        _moveLeft() {
+            if (this.ship.x < this.boundaries.left) {
+                this.ship.x = this.boundaries.right;
+            } else {
+                this.ship.x = this.ship.x - this.SHIP_MOV;         
+            }
+
+            this.ship.transform = 'rotate(-5deg)';
+
+            this._registerMovement();
+            this._emitShipInfo(); 
+        },
+        _moveRight() {
+            if (this.ship.x > this.boundaries.right) {
+                this.ship.x = -100;
+            } else {
+                this.ship.x = this.ship.x + this.SHIP_MOV;
+            }
+
+            this.ship.transform = 'rotate(5deg)';
+
+            this._registerMovement();
+            this._emitShipInfo(); 
+        },
         _listenCommands() {
             this.bus.on(this.events.KEY_UP, () => {
-                if (this.ship.y < this.boundaries.top) {
-                    this.ship.y = this.boundaries.down;      
-                } else {
-                    this.ship.y = this.ship.y - this.SHIP_MOV;      
-                }
-
-                this.ship.transform = '';              
-
-                this._registerMovement();
-                this._emitShipInfo();
+                this._moveUp();
             });
 
             this.bus.on(this.events.KEY_DOWN, () => {
-                if (this.ship.y > this.boundaries.down) {
-                    this.ship.y = this.boundaries.top;
-                } else {
-                    this.ship.y = this.ship.y + this.SHIP_MOV;        
-                }
-
-                this.ship.transform = '';
-
-                this._registerMovement();
-                this._emitShipInfo();  
+                this._moveDown();
             });
 
             this.bus.on(this.events.KEY_LEFT, () => {
-                if (this.ship.x < this.boundaries.left) {
-                    this.ship.x = this.boundaries.right;
-                } else {
-                    this.ship.x = this.ship.x - this.SHIP_MOV;         
-                }
-
-                this.ship.transform = 'rotate(-5deg)';
-
-                this._registerMovement();
-                this._emitShipInfo();  
+                 this._moveLeft();
             });
 
             this.bus.on(this.events.KEY_RIGHT, () => {
-                if (this.ship.x > this.boundaries.right) {
-                    this.ship.x = -100;
-                } else {
-                    this.ship.x = this.ship.x + this.SHIP_MOV;
-                }
-
-                this.ship.transform = 'rotate(5deg)';
-
-                this._registerMovement();
-                this._emitShipInfo();  
+                this._moveRight(); 
             });
         },
         _emitShipInfo() {

@@ -80,62 +80,65 @@ module.exports = {
                             break;
                 }
             });
-
-
         },
         _listenShip() {
             this.bus.on(this.events.SHIP_POS, (pos) => {               
                 window.requestAnimationFrame(() => {
-                    if (pos.y > this.lastShipPos.y) {
-                        for (let i = 0, len = this.NUM_STARS; i < len; i++) {
-                            this.stars[i].y -= this.STAR_MOV;
-                        }
-                    }
-
-                    if (pos.y < this.lastShipPos.y) {
-                        for (let i = 0, len = this.NUM_STARS; i < len; i++) {
-                            this.stars[i].y += this.STAR_MOV;
-                        }
-                    }
-
-                    if (pos.x > this.lastShipPos.x) {
-                        for (let i = 0, len = this.NUM_STARS; i < len; i++) {
-                            this.stars[i].x -= this.STAR_MOV;
-                        }
-                    }
-
-                    if (pos.x < this.lastShipPos.x) {
-                        for (let i = 0, len = this.NUM_STARS; i < len; i++) {
-                            this.stars[i].x += this.STAR_MOV;
-                        }
-                    }
-
-                    for (let i = 0, len = this.NUM_STARS; i < len; i++) {
-                        if (this.stars[i].y < 0) {
-                            this.stars[i].y = this._bodyHeight();
-                        }
-
-                    if (this.stars[i].y > this._bodyHeight()) { 
-                            this.stars[i].y = 0;
-                        }
-
-                        if (this.stars[i].x < 0) {
-                            this.stars[i].x = this._bodyWidth(); 
-                        }
-
-                        if (this.stars[i].x > this._bodyWidth()) {
-                            this.stars[i].x = 0; 
-                        }
-                    }
-
-                    this.lastShipPos.x = pos.x;
-                    this.lastShipPos.y = pos.y;
+                    this._moveStars();
+                    this._updateLastPos(pos);                    
                 })
             });
 
             this.bus.on(this.events.SHIP_DISTANCE, (info) => {
                 this.distance = info.distance;
             });
+        },
+        _updateLastPos(pos) {
+            this.lastShipPos.x = pos.x;
+            this.lastShipPos.y = pos.y;
+        },
+        _moveStars() {
+            if (pos.y > this.lastShipPos.y) {
+                for (let i = 0, len = this.NUM_STARS; i < len; i++) {
+                    this.stars[i].y -= this.STAR_MOV;
+                }
+            }
+
+            if (pos.y < this.lastShipPos.y) {
+                for (let i = 0, len = this.NUM_STARS; i < len; i++) {
+                    this.stars[i].y += this.STAR_MOV;
+                }
+            }
+
+            if (pos.x > this.lastShipPos.x) {
+                for (let i = 0, len = this.NUM_STARS; i < len; i++) {
+                    this.stars[i].x -= this.STAR_MOV;
+                }
+            }
+
+            if (pos.x < this.lastShipPos.x) {
+                for (let i = 0, len = this.NUM_STARS; i < len; i++) {
+                    this.stars[i].x += this.STAR_MOV;
+                }
+            }
+
+            for (let i = 0, len = this.NUM_STARS; i < len; i++) {
+                if (this.stars[i].y < 0) {
+                    this.stars[i].y = this._bodyHeight();
+                }
+
+            if (this.stars[i].y > this._bodyHeight()) { 
+                    this.stars[i].y = 0;
+                }
+
+                if (this.stars[i].x < 0) {
+                    this.stars[i].x = this._bodyWidth(); 
+                }
+
+                if (this.stars[i].x > this._bodyWidth()) {
+                    this.stars[i].x = 0; 
+                }
+            }
         },
         _randomX() {
             return Math.floor(Math.random() * this._bodyWidth()) 
