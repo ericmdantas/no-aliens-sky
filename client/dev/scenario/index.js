@@ -6,10 +6,10 @@ module.exports = {
     data() {
         return {
             NUM_STARS: 100,
-            STAR_MOV: 2,
 
             bus: new Bus(),
 
+            starMov: 2,
             distance: 0,
             stars: [],
             lastShipPos: {
@@ -23,8 +23,9 @@ module.exports = {
                 KEY_RIGHT: 'key.right',
 
                 SHIP_POS: 'ship.pos',
-
-                SHIP_DISTANCE: 'ship.distance'
+                SHIP_DISTANCE: 'ship.distance',
+                SHIP_TURBO_ON: 'ship.turbo:on',
+                SHIP_TURBO_OFF: 'ship.turbo:off'
             }
         }
     },
@@ -58,7 +59,7 @@ module.exports = {
                         let _rand3 = Math.floor(Math.random() * len);
 
                         if ((i === _rand1) || (i === _rand2) || (i === _rand3)) {
-                        this.stars[i].shiny = true;
+                            this.stars[i].shiny = true;
                         }
                     }
                 })
@@ -84,7 +85,7 @@ module.exports = {
         _listenShip() {
             this.bus.on(this.events.SHIP_POS, (pos) => {               
                 window.requestAnimationFrame(() => {
-                    this._moveStars();
+                    this._moveStars(pos);
                     this._updateLastPos(pos);                    
                 })
             });
@@ -92,33 +93,41 @@ module.exports = {
             this.bus.on(this.events.SHIP_DISTANCE, (info) => {
                 this.distance = info.distance;
             });
+
+            this.bus.on(this.events.SHIP_TURBO_ON, () => {
+                this.starMov = 50;
+            });
+
+            this.bus.on(this.events.SHIP_TURBO_OFF, () => {
+                this.starMov = 2;
+            });
         },
         _updateLastPos(pos) {
             this.lastShipPos.x = pos.x;
             this.lastShipPos.y = pos.y;
         },
-        _moveStars() {
+        _moveStars(pos) {
             if (pos.y > this.lastShipPos.y) {
                 for (let i = 0, len = this.NUM_STARS; i < len; i++) {
-                    this.stars[i].y -= this.STAR_MOV;
+                    this.stars[i].y -= this.starMov;
                 }
             }
 
             if (pos.y < this.lastShipPos.y) {
                 for (let i = 0, len = this.NUM_STARS; i < len; i++) {
-                    this.stars[i].y += this.STAR_MOV;
+                    this.stars[i].y += this.starMov;
                 }
             }
 
             if (pos.x > this.lastShipPos.x) {
                 for (let i = 0, len = this.NUM_STARS; i < len; i++) {
-                    this.stars[i].x -= this.STAR_MOV;
+                    this.stars[i].x -= this.starMov;
                 }
             }
 
             if (pos.x < this.lastShipPos.x) {
                 for (let i = 0, len = this.NUM_STARS; i < len; i++) {
-                    this.stars[i].x += this.STAR_MOV;
+                    this.stars[i].x += this.starMov;
                 }
             }
 
