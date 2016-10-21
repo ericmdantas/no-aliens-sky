@@ -7,6 +7,11 @@ module.exports = {
         path: './client/dev/',
         publicPath: '/client/dev'
     },
+    resolve: {
+      alias: {
+          vue: 'vue/dist/vue.js'
+      }
+    },
     module: {
         loaders: [
             {
