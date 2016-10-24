@@ -20,8 +20,7 @@ module.exports = {
             },
             {
                 test: /\.js$/,
-                loader: 'babel',
-                exclude: /(node_modules)/
+                loader: 'babel'
             },
             {
                 test: /\.html$/,
