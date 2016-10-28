@@ -32,7 +32,7 @@ module.exports = {
             }
         }
     },
-    ready() {
+    mounted() {
         this._drawStars();
         this._listenCommands();
         this._listenShip();

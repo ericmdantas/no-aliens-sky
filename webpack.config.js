@@ -9,7 +9,8 @@ module.exports = {
     },
     resolve: {
       alias: {
-          vue: 'vue/dist/vue.js'
+          vue: 'vue/dist/vue.js',
+          ubus: 'ubus/dist/commonjs/bus.min.js'
       }
     },
     module: {
@@ -20,7 +21,8 @@ module.exports = {
             },
             {
                 test: /\.js$/,
-                loader: 'babel'
+                loader: 'babel',
+                exclude: /(node_modules)/
             },
             {
                 test: /\.html$/,
