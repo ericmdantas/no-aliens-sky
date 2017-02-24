@@ -31,7 +31,7 @@ module.exports = {
             }
         }
     },
-    ready() {
+    mounted() {
         this._listenCommands();
         this._startLights();
     },
